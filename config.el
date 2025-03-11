@@ -156,18 +156,6 @@
         beacon-blink-when-window-scrolls t) ; Customize the beacon color
   (beacon-mode 1))                          ; Enable beacon mode globally
 
-;; get tabs of buffers
-(use-package! centaur-tabs
-  :hook (doom-first-buffer . centaur-tabs-mode)
-  :config
-  (setq centaur-tabs-style "bar"
-        centaur-tabs-set-bar 'over
-        centaur-tabs-set-icons t
-        centaur-tabs-set-close-button nil
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-modified-marker "•"
-        centaur-tabs-cycle-scope 'tabs)) ; Only cycle through visible tabs (buffers)
-
 ;; setting up a plain LaTeX class or some shit
 (with-eval-after-load 'ox-latex
   (add-to-list 'org-latex-classes

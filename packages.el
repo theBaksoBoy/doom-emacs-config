@@ -51,4 +51,3 @@
 
 
 (package! beacon)
-(package! centaur-tabs)
