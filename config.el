@@ -1,6 +1,7 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 (load! "lisp/process_org_agenda_item")
+(load! "lisp/emacspeak_logic")
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
@@ -138,6 +139,9 @@
   (define-key org-agenda-keymap
     (kbd "ä")
     #'my/org-agenda-process-item))
+(map! :leader
+      :desc "Start emacspeak with predefined settings"
+      "e s" #'my/load-emacspeak)
 
 ;; make visual lines (wrapped around lines) able to be navigated through more intuitively
 (map!
