@@ -3,14 +3,6 @@
 (load! "lisp/process_org_agenda_item")
 (load! "lisp/emacspeak_logic")
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
-
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
 ;; - `doom-font' -- the primary font to use
@@ -24,31 +16,23 @@
 ;;
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 14)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans Mono" :size 14))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-dracula)
+;; load theme and set custom faces
+(setq doom-theme 'doom-lantern)
+(custom-set-faces!
+  '(hl-line :background "#32221d") ; background color of the line that the cursor is on
+  '(org-level-1 :foreground "#eda553" :height 1.5 :weight bold)
+  '(org-level-2 :height 1.3 :weight bold)
+  '(org-level-3 :height 1.2 :weight bold)
+  '(org-level-4 :height 1.1 :weight bold)
+  '(org-scheduled-today :foreground "#eda553")
+  '(org-scheduled :foreground "#aa6a1f")
+  '(org-code :foreground "#f97400")
+  '(org-verbatim :foreground "#91d80d")
+  '(org-link :foreground "#65a1a2")
+  )
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-;; do `visual' to make folded text not count as a billion lines. Does make
-;; wrapped around lines count as multiple lines though.
 (setq display-line-numbers-type 'visual)
-
-;; Enable visual line navigation
-;; shit aint working
-;; (setq line-move-visual t)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -85,7 +69,7 @@
 (defun qleguennec/set-frame-transparency (&optional frame)
   (interactive)
   (let ((frame (or frame (selected-frame))))
-    (set-frame-parameter frame 'alpha-background 90)))
+    (set-frame-parameter frame 'alpha-background 50)))
 
 (dolist (frame (visible-frame-list))
   (qleguennec/set-frame-transparency frame))
@@ -106,13 +90,6 @@
 ;; Set time it takes until auto-complete popup appears... again. idfk the difference
 (after! corfu
   (setq corfu-auto-delay 0.15))
-
-;; Set the font size for headers in org mode
-(custom-set-faces
- '(org-level-1 ((t (:height 1.5 :weight bold))))
- '(org-level-2 ((t (:height 1.3 :weight bold))))
- '(org-level-3 ((t (:height 1.2))))
- '(org-level-4 ((t (:height 1.1)))))
 
 ;; Determine what should automatically be added to the top of created org files
 (defun my/org-default-headers ()
