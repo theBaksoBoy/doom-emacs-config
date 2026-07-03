@@ -54,3 +54,6 @@
 
 (package! odin-mode
   :recipe (:host github :repo "mattt-b/odin-mode"))
+
+(unpin! org-roam)
+(package! org-roam-ui)

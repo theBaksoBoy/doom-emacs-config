@@ -66,17 +66,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(defun qleguennec/set-frame-transparency (&optional frame)
-  (interactive)
-  (let ((frame (or frame (selected-frame))))
-    (set-frame-parameter frame 'alpha-background 50)))
-
-(dolist (frame (visible-frame-list))
-  (qleguennec/set-frame-transparency frame))
-
-(add-to-list 'after-make-frame-functions
-             #'qleguennec/set-frame-transparency)
-
 (use-package lsp-pyright
   :ensure t
   :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
@@ -91,19 +80,37 @@
 (after! corfu
   (setq corfu-auto-delay 0.15))
 
+
+
 ;; Determine what should automatically be added to the top of created org files
+;; this is not run when making an org file using org-roam
 (defun my/org-default-headers ()
-  (when (and (string= (file-name-extension (or buffer-file-name "")) "org")
-             (= (buffer-size) 0)) ;; Only add if file is empty
+  (when (and buffer-file-name
+             (not (org-roam-file-p))
+             (string= (file-name-extension buffer-file-name) "org")
+             (= (buffer-size) 0))
     (let* ((title (replace-regexp-in-string "_" " " (file-name-base buffer-file-name)))
-           (capitalized-title (concat (upcase (substring title 0 1)) (substring title 1))))
-      (unless (save-excursion (goto-char (point-min)) (re-search-forward "^#\\+title:" nil t))
+           (capitalized-title
+            (concat (upcase (substring title 0 1))
+                    (substring title 1))))
+      
+      (unless (save-excursion
+                (goto-char (point-min))
+                (re-search-forward "^#\\+title:" nil t))
         (insert "#+title: " capitalized-title "\n"))
-      (unless (save-excursion (goto-char (point-min)) (re-search-forward "^#\\+startup:" nil t))
+
+      (unless (save-excursion
+                (goto-char (point-min))
+                (re-search-forward "^#\\+startup:" nil t))
         (insert "#+startup: content\n"))
-      (unless (save-excursion (goto-char (point-min)) (re-search-forward "^#\\+SETUPFILE:" nil t))
+
+      (unless (save-excursion
+                (goto-char (point-min))
+                (re-search-forward "^#\\+SETUPFILE:" nil t))
         (insert "#+SETUPFILE: ~/.config/doom/latex-template.setup\n\n")))))
 (add-hook 'org-mode-hook #'my/org-default-headers)
+
+
 
 ;; keybindings
 (map! :leader
@@ -119,6 +126,9 @@
 (map! :leader
       :desc "Start emacspeak with predefined settings"
       "e s" #'my/load-emacspeak)
+(map! :leader
+      :desc "open org-roam-ui graph"
+      "n r g" #'(lambda () (interactive) (org-roam-ui-mode)))
 
 ;; make visual lines (wrapped around lines) able to be navigated through more intuitively
 (map!
@@ -224,3 +234,23 @@
 
 (setq scroll-margin 10
       scroll-conservatively 101)
+
+
+
+;; set up org-roam and org-roam-ui stuff
+(setq org-roam-directory (file-truename "~/notes/org-roam/"))
+; make the filename of created files not be dogshit
+(setq org-roam-capture-templates
+      '(("d" "default" plain "%?"
+         :target (file+head "${slug}.org"
+                            "#+title: ${title}\n#+startup: content\n\n")
+         :unnarrowed t)))
+; org-roam-ui stuff
+(use-package! org-roam-ui
+  :after org-roam
+  :hook (org-roam-mode . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-startup t))
