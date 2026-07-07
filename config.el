@@ -129,6 +129,11 @@
 (map! :leader
       :desc "open org-roam-ui graph"
       "n r g" #'(lambda () (interactive) (org-roam-ui-mode)))
+(map! :after org ; make the org agenda possible to close down with "z x" like you can with other buffers
+      :map org-agenda-mode-map
+      :leader
+      (:prefix ("z")
+       "x" #'doom/kill-this-buffer))
 
 ;; make visual lines (wrapped around lines) able to be navigated through more intuitively
 (map!
