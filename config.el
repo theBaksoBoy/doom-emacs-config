@@ -131,7 +131,6 @@
       "n r g" #'(lambda () (interactive) (org-roam-ui-mode)))
 (map! :after org ; make the org agenda possible to close down with "z x" like you can with other buffers
       :map org-agenda-mode-map
-      :leader
       (:prefix ("z")
        "x" #'doom/kill-this-buffer))
 
