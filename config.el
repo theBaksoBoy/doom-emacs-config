@@ -132,7 +132,7 @@
 (map! :after org ; make the org agenda possible to close down with "z x" like you can with other buffers
       :map org-agenda-mode-map
       (:prefix ("z")
-       "x" #'doom/kill-this-buffer))
+       "x" #'kill-current-buffer))
 
 ;; make visual lines (wrapped around lines) able to be navigated through more intuitively
 (map!
