@@ -34,11 +34,11 @@
           (save-buffer)
           (my/open-agenda-shortcut)
           (goto-char my-saved-point)
-          (evil-scroll-line-to-bottom 0)))
+          (call-interactively #'evil-scroll-line-to-bottom)))
 
        (t
         (org-cut-subtree)
         (save-buffer)
         (my/open-agenda-shortcut)
         (goto-char my-saved-point)
-        (evil-scroll-line-to-bottom 0))))))
+        (call-interactively #'evil-scroll-line-to-bottom))))))
