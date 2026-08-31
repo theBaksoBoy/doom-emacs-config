@@ -212,14 +212,46 @@
 (after! org
   (add-to-list 'org-agenda-files "~/notes/tasks/tasks.org"))
 
-(after! org
-  (setq org-agenda-custom-commands
-        '(("u" "Agenda + Unscheduled TODOs"
-           ((agenda "")
-            (alltodo ""
-                     ((org-agenda-skip-function
-                       '(org-agenda-skip-entry-if 'scheduled 'deadline))
-                      (org-agenda-overriding-header "Unscheduled TODOs"))))))))
+;(after! org
+;  (setq org-agenda-custom-commands
+;        '(("u" "Agenda + Unscheduled TODOs"
+;           ((agenda "")
+;            (alltodo ""
+;                     ((org-agenda-skip-function
+;                       '(org-agenda-skip-entry-if 'scheduled 'deadline))
+;                      (org-agenda-overriding-header "Unscheduled TODOs"))))))))
+(defun my-org-agenda-deadline-prefix ()
+  (let ((deadline (org-entry-get nil "DEADLINE")))
+    (when deadline
+      (let* ((days (floor (org-time-stamp-to-now deadline)))
+             (leader
+              (cond
+               ((= days 0) (nth 0 org-agenda-deadline-leaders))
+               ((> days 0) (nth 1 org-agenda-deadline-leaders))
+               (t          (nth 2 org-agenda-deadline-leaders)))))
+        (format leader (abs days))))))
+
+(setq org-agenda-custom-commands
+      '(("u" "custom org agenda view"
+         ((tags "+SCHEDULED<\"<today>\"|+DEADLINE<\"<today>\""
+                ((org-agenda-overriding-header "overdue:")))
+          (tags "+DEADLINE>=\"<today>\""
+                ((org-agenda-overriding-header "deadlines:")
+                 (org-agenda-prefix-format "%(my-org-agenda-deadline-prefix)")))
+          (tags "+priority-cyclic+SCHEDULED=\"<today>\""
+                ((org-agenda-overriding-header "priority:")))
+          (tags "+priority+cyclic+SCHEDULED=\"<today>\""
+                ((org-agenda-overriding-header "priority+cyclic:")))
+          (tags "-priority-cyclic+SCHEDULED=\"<today>\""
+                ((org-agenda-overriding-header "tasks:")))
+          (tags "-priority+cyclic+SCHEDULED=\"<today>\""
+                ((org-agenda-overriding-header "cyclic:")))
+          (agenda "")
+          (alltodo ""
+                   ((org-agenda-skip-function
+                     '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                    (org-agenda-overriding-header "unscheduled:")))
+          ))))
 
 
 ;; override surround pairs to remove spaces for brackets
@@ -235,6 +267,7 @@
 
 (use-package! odin-mode
   :mode "\\.odin\\'")
+
 
 (setq scroll-margin 10
       scroll-conservatively 101)

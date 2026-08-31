@@ -14,7 +14,7 @@
 
     (org-back-to-heading t)
     (beginning-of-line)
-    (forward-char 2)
+    (forward-char 3)
 
     (let ((first-char (char-after)))
 
@@ -33,10 +33,12 @@
           (org-schedule nil repeat-token)
           (save-buffer)
           (my/open-agenda-shortcut)
-          (goto-char my-saved-point)))
+          (goto-char my-saved-point)
+          (evil-scroll-line-to-bottom 0)))
 
        (t
         (org-cut-subtree)
         (save-buffer)
         (my/open-agenda-shortcut)
-        (goto-char my-saved-point))))))
+        (goto-char my-saved-point)
+        (evil-scroll-line-to-bottom 0))))))
