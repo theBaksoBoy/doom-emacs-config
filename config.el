@@ -291,3 +291,10 @@
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-startup t))
+
+
+
+;; fix it so that recentf actually works
+(after! recentf
+  (recentf-mode +1)
+  (add-hook! 'kill-emacs-hook #'recentf-save-list))
