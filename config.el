@@ -294,7 +294,10 @@
 
 
 
-;; fix it so that recentf actually works
+;; fix it so that recentf actually works.
+;; It saves the list every 10 minutes, and also prevents the "Wrote path/to/recentf" message from appearing every time it saves
 (after! recentf
-  (recentf-mode +1)
-  (add-hook! 'kill-emacs-hook #'recentf-save-list))
+  (run-at-time 600 600
+               (lambda ()
+                 (let ((inhibit-message t))
+                   (recentf-save-list)))))
