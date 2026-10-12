@@ -297,7 +297,7 @@
 ;; fix it so that recentf actually works.
 ;; It saves the list every 10 minutes, and also prevents the "Wrote path/to/recentf" message from appearing every time it saves
 (after! recentf
-  (run-at-time 600 600
+  (run-at-time 60 60
                (lambda ()
                  (let ((inhibit-message t))
                    (recentf-save-list)))))
