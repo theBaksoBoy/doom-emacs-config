@@ -246,11 +246,11 @@
                 ((org-agenda-overriding-header "tasks:")))
           (tags "-priority+cyclic+SCHEDULED=\"<today>\""
                 ((org-agenda-overriding-header "cyclic:")))
-          (agenda "")
           (alltodo ""
                    ((org-agenda-skip-function
                      '(org-agenda-skip-entry-if 'scheduled 'deadline))
                     (org-agenda-overriding-header "unscheduled:")))
+          (agenda "")
           ))))
 
 
